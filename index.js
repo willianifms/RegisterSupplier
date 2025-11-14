@@ -41,6 +41,9 @@ server.get("/", (requisicao, resposta) => {
                         </ul>
                         </li>
                         <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/listarFornecedor">Lista de fornecedores cadastrados</a>
+                        </li>
+                        <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="/logout">Sair</a>
                         </li>
 
@@ -55,6 +58,9 @@ server.get("/", (requisicao, resposta) => {
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
         </html>
     `);
+});
+server.get("/Login", (requisicao, resposta) => {
+    resposta.send(``); 
 });
 
 server.get("/cadastrofornecedor", (requisicao, resposta) => {
@@ -187,7 +193,7 @@ server.post('/adicionarFornecedor', (requisicao, resposta) => {
     if (cnpj && razao && nomef && cep && cidade && uf && rua && bairro && numero) {
 
         listaFornecedores.push({ cnpj, razao, nomef, cep, cidade, uf, rua, bairro, numero, complemento });
-        resposta.redirect("/listarFornecedores");
+        resposta.redirect("/listarFornecedor");
     }
     else {
 
@@ -202,9 +208,9 @@ server.post('/adicionarFornecedor', (requisicao, resposta) => {
             </head>
             <body>
                 <div class="container">
-                    <h1 class="text-center border m-3 p-3 bg-light">Cadastro de Usuários</h1>
+                    <h1 class="text-center border m-3 p-3 bg-light">Cadastro de Fornecedores</h1>
                     <form method="POST" action="/adicionarFornecedor" class="row g-3 m-3 p-3 bg-light">
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <label for="cnpj" class="form-label">CNPJ</label>
                                 <!-- O atributo 'id' identifica um elemento HTML na página para o navegador -->
                                 <!-- O atributo 'name' rotula o conteúdo que esse elemento armazena para o destinatário-->
@@ -220,7 +226,7 @@ server.post('/adicionarFornecedor', (requisicao, resposta) => {
         }
 
         conteudo += `</div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <label for="razao" class="form-label">Razão Social</label>
                                 <input type="text" class="form-control" id="razao" name="razao" value="${razao}">
                             `
@@ -234,7 +240,7 @@ server.post('/adicionarFornecedor', (requisicao, resposta) => {
         }
 
         conteudo += `</div>
-                            <div class="col-md-4">
+                            <div class="col-md-12">
                                 <label for="nomef" class="form-label">Nome Fantasia</label>
                                 <div class="input-group has-validation">
                                 <input type="text" class="form-control" id="nomef" name="nomef" aria-describedby="inputGroupPrepend" value="${nomef}">
@@ -248,19 +254,25 @@ server.post('/adicionarFornecedor', (requisicao, resposta) => {
                 </div>
             `;
         }
+        conteudo += `
+                                            <h4>Endereço</h4>
+                <hr>
+                </div>
+                            <div class="col-md-3">
+                                <label for="cep" class="form-label">Cep</label>
+                                <input type="text" class="form-control" id="cep" name="cep" value="${cep}">
+                              
+                             `;
 
-        conteudo += `</div>
-                            <div class="col-md-6">
-                                <label for="cidade" class="form-label">Cidade</label>
-                                <input type="text" class="form-control" id="cidade" name="cidade" value="${cidade}">
-                            `;
-
-        if (!cidade) {
+        if (!cep) {
             conteudo += `
             <div>
-                <p class="text-danger">Por favor, informe a cidade do usuário</p>
+                <p class="text-danger">Por favor, informe a CEP do fornecedor</p>
             </div>`
         }
+
+
+
 
 
         conteudo += `</div>
@@ -306,6 +318,19 @@ server.post('/adicionarFornecedor', (requisicao, resposta) => {
 
         conteudo += `</div>
                             <div class="col-md-6">
+                                <label for="cidade" class="form-label">Cidade</label>
+                                <input type="text" class="form-control" id="cidade" name="cidade" value="${cidade}">
+                            `;
+
+        if (!cidade) {
+            conteudo += `
+            <div>
+                <p class="text-danger">Por favor, informe a cidade do usuário</p>
+            </div>`
+        }
+
+        conteudo += `</div>
+                            <div class="col-md-4">
                                 <label for="rua" class="form-label">Rua</label>
                                 <input type="text" class="form-control" id="rua" name="rua" value="${rua}">
                             `;
@@ -317,9 +342,9 @@ server.post('/adicionarFornecedor', (requisicao, resposta) => {
             </div>`
         }
 
-        
+
         conteudo += `</div>
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <label for="bairro" class="form-label">Bairro</label>
                                 <input type="text" class="form-control" id="bairro" name="bairro" value="${bairro}">
                             `;
@@ -330,7 +355,7 @@ server.post('/adicionarFornecedor', (requisicao, resposta) => {
                 <p class="text-danger">Por favor, informe a bairro do fornecedor</p>
             </div>`
         }
-        
+
         conteudo += `</div>
                             <div class="col-md-2">
                                 <label for="numero" class="form-label">Numero</label>
@@ -344,8 +369,8 @@ server.post('/adicionarFornecedor', (requisicao, resposta) => {
             </div>`
         }
 
-                conteudo += `</div>
-                            <div class="col-md-6">
+        conteudo += `</div>
+                            <div class="col-md-3">
                                 <label for="complemento" class="form-label">Complemento</label>
                                 <input type="text" class="form-control" id="complemento" name="complemento" value="${complemento}">
                             `;
@@ -357,12 +382,18 @@ server.post('/adicionarFornecedor', (requisicao, resposta) => {
             </div>`
         }
 
-        conteudo += `</div>
-                            <div class="col-md-3">
-                                <label for="cep" class="form-label">Cep</label>
-                                <input type="text" class="form-control" id="cep" name="cep" value="${cep}">
-                              
-                             `;
+    conteudo += `</div>
+                            <div class="col-12">
+                                <button class="btn btn-primary" type="submit">Cadastrar</button>
+                                <a class="btn btn-secondary" href="/">Voltar</a>
+                            </div>
+                    </form>
+                </div>
+            </body>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        </html>
+        
+        `;
 
 
         resposta.send(conteudo);
@@ -378,7 +409,7 @@ server.get("/listarFornecedor", (requisicao, resposta) => {
             <head>
                 <meta charset="UTF-8">
                 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-                <title>Lista de usuários no Sistema</title>
+                <title>Lista de Fornecedores no Sistema</title>
             </head>
             <body>
                 <div class="container">
