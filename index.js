@@ -9,6 +9,10 @@ const server = express();
 
 server.use(express.urlencoded({ extended: true }));
 
+server.get("/logout", (requisicao, resposta) => {
+    //disponibilizar o menu para o usuário
+    resposta.send(`<h1>logout efetudo com sucesso!</h1>`);
+});
 
 server.get("/", (requisicao, resposta) => {
     //disponibilizar o menu para o usuário
@@ -60,8 +64,91 @@ server.get("/", (requisicao, resposta) => {
     `);
 });
 server.get("/Login", (requisicao, resposta) => {
-    resposta.send(``); 
+    resposta.send(`
+        <!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login Fornecedor</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f2f5f9;
+        }
+
+        .login-card {
+            max-width: 400px;
+            margin: 80px auto;
+            padding: 30px;
+            border-radius: 20px;
+            background: #ffffff;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .login-title {
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-card">
+    <h3 class="text-center login-title mb-4">Entrar</h3>
+
+    <form id="loginForm">
+        <div class="mb-3">
+            <label class="form-label">E-mail</label>
+            <input type="email" class="form-control" id="email" placeholder="teste@teste.com">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Senha</label>
+            <input type="password" class="form-control" id="senha" placeholder="123">
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 mt-3">Acessar</button>
+    </form>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+document.getElementById("loginForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const email = document.getElementById("email").value.trim();
+    const senha = document.getElementById("senha").value.trim();
+
+    const emailCorreto = "teste@teste.com";
+    const senhaCorreta = "123";
+
+    if (email === emailCorreto && senha === senhaCorreta) {
+        alert("Login realizado com sucesso!");
+
+        // redireciona para o menu ou outra página
+        window.location.href = "/"; // altere conforme seu projeto
+    } else {
+        alert("Usuário ou senha incorretos!");
+    }
+
 });
+</script>
+
+</body>
+</html>
+
+`
+
+); 
+
+});
+
+
+
 
 server.get("/cadastrofornecedor", (requisicao, resposta) => {
     resposta.send(`
